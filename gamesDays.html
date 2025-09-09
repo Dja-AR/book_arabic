@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>لعبة الأيام</title>
+<style>
+  body {
+    margin:0; padding:0;
+    font-family: "Cairo", sans-serif;
+    background: linear-gradient(135deg,#74b9ff,#0984e3);
+    display:flex; justify-content:center; align-items:center;
+    height:100vh; overflow:hidden;
+  }
+  #gameBox {
+    width:900px; height:600px;
+    background:#fff; border-radius:1.8em;
+    box-shadow:0 0 40px rgba(0,0,0,0.25);
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    padding:20px; position:relative;
+  }
+  h1#questionText {
+    font-size:32px; font-weight:700; text-align:center; min-height:3em;
+    color:#333; margin-bottom:20px;
+  }
+  .options {
+    display:flex; flex-wrap:wrap; gap:20px; justify-content:center;
+  }
+  .option {
+    width:150px; height:150px; border-radius:20px;
+    overflow:hidden; cursor:pointer;
+    box-shadow:0 6px 15px rgba(0,0,0,0.25);
+    transition:transform 0.2s ease;
+    border:5px solid transparent;
+  }
+  .option img { width:100%; height:100%; object-fit:cover; }
+  .option:hover { transform:scale(1.1); }
+  .option.correct { border-color:#2ecc71; animation:pulse 0.5s; }
+  .option.wrong   { border-color:#e74c3c; animation:shake 0.5s; }
+  @keyframes shake {0%{transform:translateX(0)}25%{transform:translateX(-10px)}50%{transform:translateX(10px)}75%{transform:translateX(-10px)}100%{transform:translateX(0)}}
+  @keyframes pulse {0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+  .scoreBox {
+    position:absolute; top:20px; left:20px;
+    background:#f9f9f9; padding:10px 20px; border-radius:12px;
+    font-size:20px; font-weight:700;
+  }
+  #endScreen {
+    display:none; flex-direction:column; justify-content:center; align-items:center;
+    position:absolute; inset:0; background:rgba(0,0,0,0.8); border-radius:1.8em;
+    color:white; text-align:center; padding:40px;
+  }
+  #endScreen h2 { font-size:40px; margin-bottom:20px; }
+  #endScreen p  { font-size:28px; }
+  button#restart {
+    margin-top:25px; font-size:22px; padding:15px 40px;
+    background:#fdcb6e; border:none; border-radius:2em;
+    cursor:pointer; transition:background 0.3s ease;
+  }
+  button#restart:hover { background:#f7b731; }
+  /* شاشة البداية */
+#startScreen {
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#ffeaa7,#fab1a0);
+  border-radius:1.8em;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+}
+
+#startScreen h1 {
+  font-size:50px;
+  font-weight:900;
+  color:#2d3436;
+  margin-bottom:30px;
+  text-shadow:2px 2px 4px rgba(0,0,0,0.2);
+}
+
+#startBtn {
+  font-size:26px;
+  padding:16px 40px;
+  border:none;
+  border-radius:2em;
+  background:#55efc4;
+  color:#2d3436;
+  cursor:pointer;
+  font-weight:800;
+  box-shadow:0 6px 14px rgba(85,239,196,.6);
+  transition:.2s;
+}
+#startBtn:hover {
+  transform:scale(1.05);
+  background:#00cec9;
+  color:white;
+}
+
+</style>
+</head>
+<body>
+<!-- شاشة البداية -->
+<div id="startScreen">
+  <h1>🎮 لعبة الأيام</h1>
+  <button id="startBtn">ابدأ اللعب</button>
+</div>
+
+<div id="gameBox">
+  <div class="scoreBox">النقاط: <span id="score">0</span></div>
+  <h1 id="questionText">...</h1>
+  <div class="options" id="options"></div>
+
+  <div id="endScreen">
+    <h2>🎉 مبروك 🎉</h2>
+    <p id="finalMsg"></p>
+    <button id="restart">إعادة اللعب</button>
+  </div>
+</div>
+
+<!-- الصوتيات -->
+<audio id="introSound" src="assets/intro.mp3" loop></audio>
+<audio id="qSound"></audio>
+<audio id="correctSound" src="assets/sonido-correcto-331225.mp3"></audio>
+<audio id="wrongSound" src="assets/buzzer-or-wrong-answer-20582.mp3"></audio>
+<audio id="winSound" src="sounds/win.mp3"></audio>
+
+<script>
+const days = [
+{ name: "الأحد",    image: "images/sunday.png",    sound: "assets/sunday.mp3" },
+  { name: "الإثنين",  image: "images/monday.png",    sound: "assets/monday.mp3" },
+  { name: "الثلاثاء",  image: "images/tuesday.png",   sound: "assets/tuesday.mp3" },
+  { name: "الأربعاء",  image: "images/wednesday.png", sound: "assets/wednesday.mp3" },
+  { name: "الخميس",    image: "images/thursday.png",  sound: "assets/thursday.mp3" },
+  { name: "الجمعة",    image: "images/friday.png",    sound: "assets/friday.mp3" },
+  { name: "السبت",     image: "images/saturday.png",  sound: "assets/sunday.mp3" }
+  ];
+const questions = [
+  { text:"أي يوم يسبق الإثنين؟", correct:"الأحد", options:["الأحد","الثلاثاء","الخميس"], sound:"audio/q1.mp3" },
+  { text:"أي يوم يأتي بعد الأربعاء؟", correct:"الخميس", options:["الثلاثاء","الخميس","السبت"], sound:"audio/q2.mp3" },
+  { text:"🎧 استمع ثم اختر اليوم الصحيح", sound:"assets/sunday.mp3", correct:"الأحد", options:["الأحد","الإثنين","السبت"] },
+  { text:"🎧 أي يوم تسمع الآن؟", sound:"assets/sunday.mp3", correct:"السبت", options:["الأحد","الإثنين","الخميس"] },
+  { text:"ما هو يوم العطلة؟", correct:"الجمعة", options:["الجمعة","الثلاثاء","الخميس"], sound:"audio/q3.mp3" }
+];
+
+let current = 0;
+let score = 0;
+
+const scoreBox = document.getElementById("score");
+
+function getDayData(name){
+  return days.find(d=>d.name===name);
+}
+
+function showQuestion(){
+  if(current >= questions.length){ endGame(); return; }
+  const q = questions[current];
+  document.getElementById("questionText").innerText = q.text;
+  const optBox = document.getElementById("options");
+  optBox.innerHTML = "";
+
+  // تشغيل صوت السؤال لو موجود
+  const qSound = document.getElementById("qSound");
+  if(q.sound){
+    qSound.pause();
+    qSound.src = q.sound;
+    qSound.load();
+    qSound.play().catch(()=>{});
+  }
+
+  // الأجوبة صور من المصفوفة
+  q.options.forEach(opt=>{
+    const btn = document.createElement("div");
+    btn.className = "option";
+    const img = document.createElement("img");
+    const day = getDayData(opt);
+    img.src = day ? day.image : "images/default.png";
+    img.alt = opt;
+    btn.appendChild(img);
+    btn.onclick = ()=> checkAnswer(btn, opt, q.correct);
+    optBox.appendChild(btn);
+  });
+}
+
+function checkAnswer(btn, answer, correct){
+  if(answer === correct){
+    btn.classList.add("correct");
+    document.getElementById("correctSound").play();
+    score++;
+    scoreBox.innerText = score;
+  } else {
+    btn.classList.add("wrong");
+    document.getElementById("wrongSound").play();
+  }
+  setTimeout(()=>{
+    current++;
+    showQuestion();
+  }, 1200);
+}
+
+function endGame(){
+  document.getElementById("winSound").play();
+  document.getElementById("endScreen").style.display = "flex";
+  document.getElementById("finalMsg").innerText = `جميل! لقد حصلت على ${score} من ${questions.length} نقاط 🌟`;
+}
+
+document.getElementById("restart").onclick = ()=>{
+  current=0; score=0;
+  scoreBox.innerText = score;
+  document.getElementById("endScreen").style.display="none";
+  showQuestion();
+};
+
+// أول تشغيل
+window.onload = ()=>{
+  showQuestion();
+  // تشغيل الموسيقى الخلفية بعد نقرة
+  document.body.addEventListener("click", ()=>{
+    const intro = document.getElementById("introSound");
+    if(intro.paused){ intro.play().catch(()=>{}); }
+  }, {once:true});
+};
+// عند الضغط على زر البداية
+document.getElementById("startBtn").onclick = () => {
+  document.getElementById("startScreen").style.display = "none"; // إخفاء شاشة البداية
+  showQuestion(); // تشغيل اللعبة
+  document.getElementById("introSound").play().catch(()=>{}); // تشغيل الموسيقى الخلفية
+};
+
+</script>
+
+</body>
+</html>

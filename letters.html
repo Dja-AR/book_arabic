@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تعلم الحروف</title>
+  <link rel="stylesheet" href="s.css" />
+</head>
+<style>
+ /* زر البداية */
+#start-btn {
+  font-size: 2rem;          
+  padding: 20px 40px;       
+  background: #ff9800;      
+  color: white;
+  border: none;
+  border-radius: 15px;      
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s, background 0.2s;
+
+  /* أنيميشن نابض */
+  animation: pulse 1.5s infinite;
+}
+
+/* عند المرور عليه يكبر أكثر */
+#start-btn:hover {
+  background: #e68900;
+  transform: scale(1.2);
+}
+
+/* عند الضغط */
+#start-btn:active {
+  transform: scale(0.95);
+}
+
+/* حركة نابض */
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+  
+  
+  </style>
+<body>
+
+<!-- ✅ نافذة التقدم بعد كل 5 حروف -->
+<div id="star-popup" class="popup-container" style="display: none;">
+  <div class="popup-box">
+    <h2>⭐ أحسنت! ⭐</h2>
+    <p>لقد تعلمت 5 حروف! استمر يا بطل!</p>
+    <div style="font-size: 50px; text-align: center;">🌟🌟🌟</div>
+    <button onclick="continueLearning()">✅ استمر</button>
+  </div>
+</div>
+
+<!-- ✅ نافذة التهنئة النهائية -->
+<div id="success-popup" class="popup-container" style="display: none;">
+  <div class="popup-box">
+    <div style="font-size: 60px; text-align: center;">🎖️🏆🎖️</div>
+    <h2>🎉 أحسنت يا بطل! 🎉</h2>
+    <button onclick="closePopup()">🔙 العودة</button>
+  </div>
+</div>
+
+<!-- ✅ شاشة البداية -->
+<div id="intro-screen">
+  <h1>🌟 رحلة الحروف السحرية 🌟</h1>
+  <p id="typed-text"></p>
+  <img src="images/-cartoon-boy.png" alt="رسوم كرتونية" />
+  
+ <!-- زر البداية -->
+ <button id="start-btn">🚀 هيا نبدأ</button>
+
+ <!-- صوت الترحيب -->
+ <audio id="motivation-audio" src="assets/Welcome2.mp3" preload="auto"></audio>
+</div>
+</div>
+
+<!-- ✅ زر العودة للرئيسية -->
+<div class="top-bar">
+  <a href="home.html">
+    <button class="home-button">🏠 الرئيسية</button>
+  </a>
+</div>
+
+<!-- ✅ واجهة الحروف -->
+<div class="main-wrapper">
+  <button class="nav-button prev" onclick="nextLetter()">⮞</button>
+
+  <div class="letter-card">
+    <div class="image-wrapper">
+      <img id="image" src="images/A1.png" alt="صورة الحرف" />
+    </div>
+    <button class="listen-button" onclick="playSound()">🔊 اضغط للاستماع</button>
+  </div>
+
+  <button class="nav-button next" onclick="prevLetter()">⮜</button>
+</div>
+
+<!-- ✅ جميع ملفات الصوت المطلوبة -->
+<audio id="audio"></audio>
+<audio id="bravo-audio" src="assets/Bravo.mp3" preload="auto"></audio>
+<audio id="fun-audio" src="assets/fun.mp3" preload="auto"></audio>
+<audio id="success-audio" src="assets/Bravo1 (1).mp3" preload="auto"></audio>
+<audio id="welcome-audio" autoplay preload="auto">
+  <source src="assets/Welcome2.mp3" type="audio/mpeg" />
+</audio>
+
+<!-- ✅ سكربت الجافاسكربت -->
+<script src="letters.js"></script>
+
+<!-- ✅ إخفاء شاشة المقدمة تلقائيًا -->
+
+
+
+</body>
+</html>

@@ -1,0 +1,266 @@
+/* إعدادات الصفحة */
+body {
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  background: url('images/background.png') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  direction: rtl;
+  position: relative;
+}
+
+/* زر الرئيسية */
+.top-bar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+.home-button {
+  background-color: #2196f3;
+  color: white;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: background-color 0.3s, transform 0.3s;
+}
+.home-button:hover {
+  background-color: #1976d2;
+  transform: scale(1.05);
+}
+
+/* الحاوية الرئيسية */
+.main-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 25px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+  max-width: 95%;
+  width: 95%;
+  flex-wrap: nowrap;
+}
+
+/* الحرف */
+.letter-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+.image-wrapper {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 15px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.letter-card img {
+  width: 100%;
+  max-width: 700px;       /* تكبير الصورة أكثر */
+  max-height: 80vh;       /* تأخذ 80% من ارتفاع الشاشة */
+  height: auto;
+  object-fit: contain;
+  border-radius: 25px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s ease;
+}
+
+.letter-card img:hover {
+  transform: scale(1.05); /* تأثير بسيط عند المرور */
+}
+
+
+
+/* زر الاستماع */
+.listen-button {
+  margin-top: 20px;
+  background: #4caf50;
+  color: white;
+  font-size: 1.5rem;
+  padding: 16px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: background 0.3s, transform 0.3s;
+}
+.listen-button:hover {
+  background: #388e3c;
+  transform: scale(1.03);
+}
+
+/* أزرار التنقل */
+.nav-button {
+  background-color: #ff9800;
+  color: white;
+  font-size: 2.2rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s, transform 0.3s;
+}
+.nav-button:hover {
+  background-color: #f57c00;
+  transform: scale(1.1);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .main-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .nav-button {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+  .letter-card img {
+    max-width: 90vw;
+  }
+  .listen-button {
+    font-size: 1.2rem;
+    width: 90vw;
+  }
+  .top-bar {
+    top: 10px;
+    right: 10px;
+  }
+}
+.popup-container {
+  position: fixed;
+  top: 0; right: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 400px;
+}
+
+.popup-box h2 {
+  font-size: 2rem;
+  color: #4caf50;
+  margin-bottom: 20px;
+}
+
+.popup-box img {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.popup-box button {
+  background: #2196f3;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.popup-box button:hover {
+  background: #1976d2;
+}
+/* نفس تصميم نافذة التهنئة السابقة */
+.popup-container {
+  position: fixed;
+  top: 0; right: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-box {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+.popup-box img {
+  width: 150px;
+  margin-top: 15px;
+}
+.popup-box button {
+  margin-top: 20px;
+  background: #ff9800;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+/* ✅ شاشة المقدمة */
+#intro-screen {
+  position: fixed;
+  top: 0; right: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  padding: 20px;
+}
+
+#intro-screen h1 {
+  font-size: 2.3rem;
+  color: #ff4081;
+  margin-bottom: 10px;
+}
+
+#typed-text {
+  font-size: 1.3rem;
+  color: #333;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+#intro-screen img {
+  width: 200px;
+  height: auto;
+  margin-top: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}

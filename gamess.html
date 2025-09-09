@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🎮 لعبة الأرقام</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<style>
+ /* جميع الأنماط كما هي في كودك الأصلي */
+html, body {margin:0;padding:0;width:100%;height:100%;overflow:hidden;}
+body>* {width:100%;height:100%;box-sizing:border-box;}
+#startScreen,#gameScreen,#endScreen {width:900px;height:600px;background:white;border-radius:1.8em;box-shadow:0 0 30px rgba(0,0,0,0.1);display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;}
+#startScreen {background:linear-gradient(135deg,#74b9ff 0%,#0984e3 100%);color:white;gap:2vh;text-align:center;user-select:none;}
+#startScreen h1 {font-size:48px;font-weight:700;text-shadow:0 0 6px rgba(0,0,0,0.3);}
+#startScreen button {font-size:24px;padding:1em 4em;border:none;background:#fdcb6e;border-radius:3em;cursor:pointer;box-shadow:0 5px 15px rgba(253,203,110,0.7);transition:background 0.3s ease,box-shadow 0.3s ease;}
+#startScreen button:hover {background:#f7b731;box-shadow:0 7px 20px rgba(247,183,49,0.85);}
+#gameScreen.hidden {display:none;}
+.frame {padding:20px 30px;width:100%;height:100%;display:flex;flex-direction:column;}
+.top-row {display:flex;justify-content:space-between;margin-bottom:15px;}
+.score,.timer {background:#f9f9f9;padding:10px 20px;border-radius:1em;font-size:22px;font-weight:700;box-shadow:inset 0 0 8px rgba(0,0,0,0.06);user-select:none;min-width:120px;text-align:center;}
+h1#questionText {font-size:32px;font-weight:700;margin-bottom:20px;text-align:center;min-height:3.5em;color:#333;user-select:none;}
+/* ===== الحاوية الرئيسية ===== */
+/* ===== الحاوية الرئيسية ===== */
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;       /* زيادة المسافة بين الصورة والأزرار */
+  flex-wrap: wrap;
+}
+
+/* ===== الصورة في شكل هندسي ===== */
+.left-card {
+  width: 350px;       /* تكبير الصورة */
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+.left-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* شكل سداسي */
+.left-card.hexagon {
+  clip-path: polygon(
+    25% 6.7%, 75% 6.7%, 100% 50%, 
+    75% 93.3%, 25% 93.3%, 0% 50%
+  );
+  border-radius: 10px;
+}
+
+/* ===== أزرار الإجابة ===== */
+.right {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30px;       /* زيادة المسافة بين الأزرار */
+  max-width: 500px;
+}
+
+/* شكل الزر الأساسي */
+.option {
+  width: 100px;      /* تكبير الدائرة */
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 36px;   /* تكبير الرقم */
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+/* تأثير عند المرور */
+.option:hover:not(.correct):not(.wrong) {
+  transform: translateY(-8px) scale(1.25) rotate(-5deg);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.3);
+}
+
+.option.blue    { background: linear-gradient(135deg,#39a7f8,#0b7fe0); }   /* أزرق سماوي زاهي */
+.option.red     { background: linear-gradient(135deg,#ff5e6c,#ff3b5c); }   /* أحمر وردي جذاب */
+.option.green   { background: linear-gradient(135deg,#27ae60,#1abc4b); }   /* أخضر زاهي */
+.option.yellow  { background: linear-gradient(135deg,#FFD93D,#FFC107); }   /* أصفر مشمس */
+.option.purple  { background: linear-gradient(135deg,#A569BD,#8A2BE2); }   /* بنفسجي مرح */
+
+/* أشكال هندسية مختلفة للأزرار */
+.option.circle { border-radius: 50%; }
+.option.triangle { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+.option.star { 
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2% 35%, 39% 35%
+  ); 
+}
+
+/* خيارات صحيحة وخاطئة */
+.option.correct {
+  background: #27ae60 !important;
+  box-shadow: 0 10px 25px rgba(39,174,96,0.7);
+}
+.option.wrong {
+  background: #e74c3c !important;
+  box-shadow: 0 10px 25px rgba(231,76,60,0.7);
+}
+
+
+.nav-buttons {display:flex;justify-content:space-between;margin-top:20px;}
+.nav-buttons button {font-size:20px;padding:12px 30px;border:none;border-radius:1.2em;background:#ddd;cursor:pointer;transition:background 0.3s ease;box-shadow:0 4px 6px rgba(0,0,0,0.1);user-select:none;min-width:140px;}
+.nav-buttons button:hover:not(:disabled) {background:#bbb;}
+.nav-buttons button:disabled {background:#f0f0f0;cursor:not-allowed;box-shadow:none;}
+.feedback {position:fixed;font-size:12vw;animation-duration:1s;animation-fill-mode:forwards;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);user-select:none;z-index:9999;}
+.thumb-up {color:#27ae60;animation-name:flyUp;}
+.thumb-down {color:#e74c3c;animation-name:shake;}
+@keyframes flyUp {0%{opacity:1;transform:translate(-50%,-50%) translateY(0);}100%{opacity:0;transform:translate(-50%,-50%) translateY(-12vh);}}
+@keyframes shake {0%,100%{transform:translate(-50%,-50%) translateX(0);}25%{transform:translate(-50%,-50%) translateX(-1.2vw);}75%{transform:translate(-50%,-50%) translateX(1.2vw);}}
+#endScreen {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:none;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;z-index:20;padding:1.5em;}
+#endScreen h2 {font-size:46px;margin-bottom:12px;font-weight:700;}
+#endScreen p {font-size:32px;}
+.fireworks {position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;background:url('images/fireworks.gif') center/cover no-repeat;opacity:0.6;z-index:10;}
+.glow-correct {position:absolute;inset:0;border-radius:1.8em;pointer-events:none;box-shadow:0 0 25px 15px rgba(39,174,96,0.6),0 0 60px 30px rgba(39,174,96,0.4),inset 0 0 40px 15px rgba(39,174,96,0.7);animation:pulseGreen 1.2s ease forwards;z-index:15;}
+.glow-wrong {position:absolute;inset:0;border-radius:1.8em;pointer-events:none;box-shadow:0 0 25px 15px rgba(231,76,60,0.6),0 0 60px 30px rgba(231,76,60,0.4),inset 0 0 40px 15px rgba(231,76,60,0.7);animation:pulseRed 1.2s ease forwards;z-index:15;}
+@keyframes pulseGreen {0%{opacity:0;}30%{opacity:1;}70%{opacity:1;}100%{opacity:0;}}
+@keyframes pulseRed {0%{opacity:0;}30%{opacity:1;}70%{opacity:1;}100%{opacity:0;}}
+#congratsPopup {display:none;position:fixed;top:30%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#27ae60,#2ecc71);padding:30px 50px;border-radius:2em;box-shadow:0 0 35px rgba(46,204,113,0.9);text-align:center;z-index:10000;font-family:"Cairo",sans-serif;color:white;width:450px;user-select:none;animation:popupFadeIn 0.6s ease forwards;}
+#congratsPopup h2 {margin-bottom:15px;font-weight:900;font-size:40px;letter-spacing:1.5px;text-shadow:0 0 10px rgba(0,0,0,0.3);}
+#congratsPopup p {font-size:26px;margin-bottom:25px;text-shadow:0 0 6px rgba(0,0,0,0.2);}
+.stars-container {font-size:48px;margin-bottom:15px;animation:starBounce 1.5s infinite alternate;filter:drop-shadow(0 0 6px rgba(0,0,0,0.2));}
+.star {margin:0 8px;display:inline-block;animation:starGlow 2s infinite;}
+.star:nth-child(2){animation-delay:0.5s;}
+.star:nth-child(3){animation-delay:1s;}
+@keyframes starGlow {0%,100%{filter:drop-shadow(0 0 12px #2ecc71) drop-shadow(0 0 20px #27ae60);transform:scale(1);}50%{filter:drop-shadow(0 0 20px #27ae60) drop-shadow(0 0 30px #2ecc71);transform:scale(1.4);}}
+@keyframes starBounce {0%{transform:translateY(0);}100%{transform:translateY(-12px);}}
+#congratsPopup .fireworks {position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;background:url('images/fireworks.gif') center/contain no-repeat;opacity:0.75;z-index:9999;animation:fadeInOut 4s forwards;}
+@keyframes popupFadeIn {0%{opacity:0;transform:translateX(-50%) translateY(20px);}100%{opacity:1;transform:translateX(-50%) translateY(0);}}
+@keyframes fadeInOut {0%{opacity:0;}20%,80%{opacity:0.75;}100%{opacity:0;}}
+</style>
+</head>
+<body>
+
+<div id="startScreen">
+  <h1>🎮 لعبة الأرقام</h1>
+  <button id="startBtn">ابدأ اللعب</button>
+</div>
+
+<div id="gameScreen" class="hidden">
+  <div class="frame" id="frame">
+    <div class="top-row">
+      <div class="score">النقاط: <span id="score">0</span> ⭐</div>
+      <div class="timer">الوقت: <span id="time">20</span> ⏳</div>
+    </div>
+    <h1 id="questionText"></h1>
+    <div class="main">
+      <div class="left-card">
+        <img id="questionImage" src="" alt="صورة السؤال" draggable="false" />
+      </div>
+      <div class="right">
+        <div class="option blue circle"></div>
+        <div class="option red circle"></div>
+        <div class="option green circle"></div>
+        <div class="option yellow circle"></div>
+    </div>
+    
+    </div>
+    <div class="nav-buttons">
+      <button id="prevBtn">⬅ السابق</button>
+      <button id="nextBtn">التالي ➡</button>
+    </div>
+  </div>
+</div>
+
+<div id="congratsPopup">
+  <div class="fireworks"></div>
+  <div class="stars-container">
+    <span class="star">⭐</span>
+    <span class="star">⭐</span>
+    <span class="star">⭐</span>
+  </div>
+  <h2>مبروك! 🎉</h2>
+  <p id="congratsScore"></p>
+</div>
+
+<audio id="introSound" src="assets/intro.mp3" loop></audio>
+<audio id="correctSound" src="assets/sonido-correcto-331225.mp3"></audio>
+<audio id="wrongSound" src="assets/buzzer-or-wrong-answer-20582.mp3"></audio>
+<audio id="winSound" src="sounds/win.mp3"></audio>
+<audio id="sound1" src="assets/N1.mp3"></audio>
+<audio id="sound2" src="assets/N2.mp3"></audio>
+<audio id="sound3" src="assets/N3.mp3"></audio>
+<audio id="sound4" src="assets/N4.mp3"></audio>
+<audio id="sound5" src="assets/N5.mp3"></audio>
+<audio id="sound6" src="assets/N6.mp3"></audio>
+<audio id="sound7" src="assets/N7.mp3"></audio>
+<audio id="sound8" src="assets/N8.mp3"></audio>
+<audio id="sound9" src="assets/N9.mp3"></audio>
+<audio id="sound10" src="assets/N10.mp3"></audio>
+<audio id="questionVoice"></audio>
+
+<script>
+let totalScore = 0;
+let timeLeft = 20;
+let timer;
+let currentGroup = 0;
+let currentQuestion = 0;
+let groupScores = [];
+
+const startScreen = document.getElementById('startScreen');
+const gameScreen = document.getElementById('gameScreen');
+const startBtn = document.getElementById('startBtn');
+const scoreEl = document.getElementById('score');
+const timeEl = document.getElementById('time');
+const questionText = document.getElementById('questionText');
+const questionImage = document.getElementById('questionImage');
+const options = document.querySelectorAll('.option');
+const introSound = document.getElementById('introSound');
+const correctSound = document.getElementById('correctSound');
+const wrongSound = document.getElementById('wrongSound');
+const winSound = document.getElementById('winSound');
+const questionVoice = document.getElementById('questionVoice');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const congratsPopup = document.getElementById('congratsPopup');
+const congratsScore = document.getElementById('congratsScore');
+const frame = document.getElementById('frame');
+const groups = [
+  [
+    { text: "🐟 انظر للأسماك الجميلة! كم سمكة تسبح هنا؟", image: "images/FICH.png", sound: "assets/fish.mp3", correct: "1" },
+    { text: "🐱 يا سلام! كم قطة لطيفة تراها؟", image: "images/cute-cats.png", sound: "assets/Cute.mp3", correct: "2" },
+    { text: "✏️ الأقلام جاهزة للرسم! كم قلمًا يوجد هنا؟", image: "images/PAIN.png", sound: "assets/Pain.mp3", correct: "3" }
+  ],
+  [
+    { text: "🍎 التفاح الأحمر الشهي! كم تفاحة تراها؟", image: "images/POM.jpg", sound: "assets/Pom.mp3", correct: "4" },
+    { text: "🚗 السيارات الملونة! كم سيارة في الطريق؟", image: "images/5 cars.png", sound: "assets/Care.mp3", correct: "5" },
+    { text: "🏀🎾 الكرات هنا وهناك! كم كرة تراها؟", image: "images/6 bascat.png", sound: "assets/Balls.mp3", correct: "6" }
+  ],
+  [
+    { text: "🐦 العصافير تغرد! كم طائرًا في السماء؟", image: "images/7 sos.png", sound: "assets/Sos.mp3", correct: "7" },
+    { text: "🏠 بيوت جميلة! كم بيتًا في الصورة؟", image: "images/houses.png", sound: "assets/Host.mp3", correct: "8" },
+    { text: "📚 يا قارئ الكتب! كم كتابًا هنا؟", image: "images/books.png", sound: "assets/Book.mp3", correct: "9" },
+    { text: "⚽ كرة القدم المفضلة! كم كرة هنا؟", image: "images/soccer-ball.png", sound: "assets/Football.mp3", correct: "10" }
+  ]
+];
+
+
+function getGroupFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const g = parseInt(params.get('group'));
+  if (!g || g < 1 || g > groups.length) return 1;
+  return g;
+}
+
+// --- التعديل الرئيسي: loadQuestion مع خيارات ديناميكية ---
+function loadQuestion() {
+  const q = groups[currentGroup][currentQuestion];
+  questionText.textContent = q.text;
+  questionImage.src = q.image;
+  questionVoice.src = q.sound;
+  questionVoice.play();
+
+  const optionsArray = Array.from(options);
+  const groupCorrectNumbers = groups[currentGroup].map(item => item.correct);
+  optionsArray.forEach((o, i) => {
+    o.classList.remove('correct','wrong');
+    o.style.pointerEvents = "auto";
+    o.textContent = groupCorrectNumbers[i] || "";
+    o.dataset.answer = groupCorrectNumbers[i] || "";
+  });
+
+  removeGlow();
+}
+
+function startTimer() {
+  clearInterval(timer);
+  timeLeft = 20;
+  timeEl.textContent = timeLeft;
+  timer = setInterval(() => {
+    timeLeft--;
+    timeEl.textContent = timeLeft;
+    if(timeLeft<=0){clearInterval(timer);nextQuestion();}
+  },1000);
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if(currentQuestion>=groups[currentGroup].length){
+    clearInterval(timer);
+    const groupScore = Number(scoreEl.textContent);
+    groupScores[currentGroup] = groupScore;
+    totalScore += groupScore;
+    showCongratsPopup(groupScore);
+  } else {
+    loadQuestion();
+    startTimer();
+  }
+}
+
+function showCongratsPopup(groupScore){
+  gameScreen.classList.add('hidden');
+  congratsScore.textContent = `لقد ربحت ${groupScore} نقطة في هذه المجموعة!`;
+  congratsPopup.style.display = 'flex';
+}
+
+congratsPopup.addEventListener('click',()=>{
+  congratsPopup.style.display='none';
+  currentGroup++;
+  if(currentGroup>=groups.length){endGame();}
+  else{
+    currentQuestion=0;
+    scoreEl.textContent=0;
+    gameScreen.classList.remove('hidden');
+    loadQuestion();
+    startTimer();
+  }
+});
+
+function endGame(){
+  introSound.pause();
+  winSound.play();
+  gameScreen.classList.add('hidden');
+  alert(`انتهت اللعبة! مجموع نقاطك: ${totalScore}`);
+}
+
+function removeGlow(){
+  const green = frame.querySelector('.glow-correct');
+  if(green) green.remove();
+  const red = frame.querySelector('.glow-wrong');
+  if(red) red.remove();
+}
+
+function showGlow(type){
+  removeGlow();
+  const glowDiv = document.createElement('div');
+  glowDiv.className = type==='correct'?'glow-correct':'glow-wrong';
+  frame.appendChild(glowDiv);
+  setTimeout(()=>{glowDiv.remove();},1200);
+}
+
+options.forEach(option=>{
+  option.addEventListener('click',()=>{
+    const answer = option.dataset.answer;
+    options.forEach(o=>o.style.pointerEvents="none");
+    const q = groups[currentGroup][currentQuestion];
+    if(answer===q.correct){
+      scoreEl.textContent=Number(scoreEl.textContent)+2;
+      correctSound.play();
+      option.classList.add('correct');
+      showGlow('correct');
+    } else {
+      option.classList.add('wrong');
+      questionImage.src="images/sad-bear.png";
+      wrongSound.play();
+      showGlow('wrong');
+    }
+    clearInterval(timer);
+    setTimeout(nextQuestion,1500);
+  });
+});
+
+startBtn.addEventListener('click',()=>{
+  startScreen.style.display='none';
+  gameScreen.classList.remove('hidden');
+  introSound.play();
+  currentGroup = getGroupFromURL()-1;
+  currentQuestion=0;
+  loadQuestion();
+  startTimer();
+});
+</script>
+
+</body>
+</html>

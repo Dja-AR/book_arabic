@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>مرحبًا يا أصدقاء</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* شاشة الترحيب */
+    .logo-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .logo-title {
+      font-size: 3.5rem; /* تكبير العنوان */
+      color: #ff5722;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      animation: zoomIn 1s ease-in-out;
+    }
+    .logo-subtitle {
+      font-size: 2rem; /* تكبير الشعار */
+      color: #444;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+      animation: fadeIn 2s ease-in-out;
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شاشة الترحيب -->
+  <div id="logoScreen" class="logo-screen">
+    <div class="logo-title">🌟 عالم المرح والتعلم 🌟</div>
+    <div class="logo-subtitle">التعلم يبدأ بابتسامة 😊</div>
+  </div>
+
+  <!-- شاشة البداية -->
+  <div id="startScreen" class="start-screen" style="display: none;">
+    <img src="images/cartoon.png" alt="شخصية كرتونية" class="start-character">
+    <button id="startBtn" class="start-button">🎉 هيا نبدأ!</button>
+  </div>
+
+  <!-- الأصوات -->
+  <audio id="introSound" src="assets/intro.mp3" loop></audio>
+  <audio id="welcomeSound" src="assets/welcom.mp3"></audio>
+  <audio id="learnPromptSound" src="assets/welcom frends.mp3"></audio>
+  <audio id="card1Sound" src="assets/later.mp3"></audio>
+  <audio id="card2Sound" src="assets/NB.mp3"></audio>
+  <audio id="card3Sound" src="assets/days.mp3"></audio>
+
+  <!-- المحتوى الرئيسي -->
+  <div id="mainContainer" class="container" style="display: none;">
+    <h1 id="mainTitle" class="title"></h1>
+
+    <div class="buttons">
+      <div id="card1" class="card" onclick="goTo('letters.html')">
+        <img src="images/images1.png" class="icon-image" alt="تعلم الحروف">
+        <div class="label">تعلم الحروف 📚</div>
+      </div>
+
+      <div id="card2" class="card" onclick="goTo('numbers.html')">
+        <img src="images/Numbers.jpg" class="icon-image" alt="تعلم الأرقام">
+        <div class="label">تعلم الأرقام 🔢</div>
+      </div>
+
+      <div id="card3" class="card" onclick="goTo('days.html')">
+        <img src="images/days.jpeg" class="icon-image" alt="أيام الأسبوع">
+        <div class="label">أيام الأسبوع 🗓️</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // عرض شاشة الترحيب 3 ثواني
+    window.onload = function() {
+      setTimeout(function() {
+        document.getElementById("logoScreen").style.animation = "fadeOut 1s forwards";
+        setTimeout(function(){
+          document.getElementById("logoScreen").style.display = "none";
+          document.getElementById("startScreen").style.display = "flex";
+        }, 1000);
+      }, 3000);
+    }
+
+    function goTo(page) {
+      window.location.href = page;
+    }
+  </script>
+<script src="script.js"></script>
+
+
+</body>
+</html>
