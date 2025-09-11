@@ -183,4 +183,62 @@ body {
       border-radius: 12px;
       cursor: pointer;
     }
-    
+    /* Responsive للهاتف */
+@media (max-width: 600px) {
+  body {
+    background-size: cover;
+    padding: 10px;
+  }
+
+  .container {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .buttons {
+    gap: 15px; /* نقصت المسافة بين الكروت */
+  }
+
+  .card {
+    width: 110px;
+    padding: 12px 5px;
+  }
+
+  .icon-image {
+    width: 55px;
+    height: 55px;
+  }
+
+  .label {
+    font-size: 0.85rem;
+  }
+
+  .start-character {
+    width: 150px;
+    margin-bottom: 20px;
+  }
+
+  .start-button {
+    padding: 15px 25px;
+    font-size: 18px;
+    border-radius: 15px;
+  }
+
+  /* نافذة اللعبة في الهاتف */
+  #game-popup .popup-box {
+    width: 90vw;
+    height: 75vh;
+    padding: 15px;
+  }
+
+  #game-popup .popup-box button {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+  }
+}

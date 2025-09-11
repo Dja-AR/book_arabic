@@ -20,7 +20,10 @@
       font-family: 'Cairo', sans-serif;
       text-align: center;
       animation: fadeIn 1s ease-in-out;
+      padding: 20px;
+      box-sizing: border-box; /* باش المارجين والبادينج يتحسبوا صح */
     }
+  
     .logo-title {
       font-size: 3.5rem; /* تكبير العنوان */
       color: #ff5722;
@@ -28,21 +31,45 @@
       margin-bottom: 15px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
       animation: zoomIn 1s ease-in-out;
+      line-height: 1.3; /* باش ما يلصقش النص */
+      word-wrap: break-word; /* يكسر السطر إذا كان طويل */
     }
+  
     .logo-subtitle {
       font-size: 2rem; /* تكبير الشعار */
       color: #444;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
       animation: fadeIn 2s ease-in-out;
+      line-height: 1.4;
+      word-wrap: break-word;
     }
+  
+    /* نسخة الهاتف */
+    @media (max-width: 768px) {
+      .logo-title {
+        font-size: 2rem;  /* أصغر باش يبان مليح في الهاتف */
+        margin-bottom: 10px;
+      }
+      .logo-subtitle {
+        font-size: 1.2rem;
+        padding: 0 10px; /* باش النص ما يلصقش في الحافة */
+      }
+      .logo-screen {
+        padding: 15px; /* يقلل البادينج باش يبان كلش */
+      }
+    }
+  
     @keyframes fadeOut {
       to { opacity: 0; visibility: hidden; }
     }
+  
     @keyframes zoomIn {
       from { transform: scale(0.8); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
   </style>
+  
+  
 </head>
 <body>
 

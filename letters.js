@@ -160,11 +160,7 @@ const startBtn = document.getElementById("start-btn");
 const intro = document.getElementById("intro-screen");
 const welcomeAudio = document.getElementById("welcome-audio");
 
-// لو ما كانش فيه امتداد.. حسّن المسار تلقائياً
-const SAFE_SRC = "assets/Welcome2.mp3";
-if (!welcomeAudio.getAttribute("src") || !welcomeAudio.getAttribute("src").includes(".mp3")) {
-  welcomeAudio.src = SAFE_SRC;
-}
+
 
 function goToLesson() {
   intro.style.display = "none";

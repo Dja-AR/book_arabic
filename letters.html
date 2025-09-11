@@ -7,14 +7,14 @@
   <link rel="stylesheet" href="s.css" />
 </head>
 <style>
- /* زر البداية */
+/* زر البداية */
 #start-btn {
-  font-size: 2rem;          
-  padding: 20px 40px;       
-  background: #ff9800;      
+  font-size: clamp(1.2rem, 2vw, 2rem);   /* الحجم يتأقلم مع الشاشة */
+  padding: clamp(12px, 2vh, 20px) clamp(20px, 4vw, 40px);
+  background: #ff9800;
   color: white;
   border: none;
-  border-radius: 15px;      
+  border-radius: 15px;
   cursor: pointer;
   margin-top: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -22,12 +22,16 @@
 
   /* أنيميشن نابض */
   animation: pulse 1.5s infinite;
+
+  width: 100%;
+  max-width: 350px;  /* 🚀 يبقى ثابت وما يكبرش بزاف */
+  text-align: center;
 }
 
-/* عند المرور عليه يكبر أكثر */
+/* عند المرور */
 #start-btn:hover {
   background: #e68900;
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
 /* عند الضغط */
@@ -38,12 +42,10 @@
 /* حركة نابض */
 @keyframes pulse {
   0%   { transform: scale(1); }
-  50%  { transform: scale(1.1); }
+  50%  { transform: scale(1.08); }
   100% { transform: scale(1); }
 }
-
-  
-  
+ 
   </style>
 <body>
 
@@ -89,7 +91,7 @@
 
 <!-- ✅ واجهة الحروف -->
 <div class="main-wrapper">
-  <button class="nav-button prev" onclick="nextLetter()">⮞</button>
+  <button class="nav-button prev" onclick="nextLetter()">👉</button>
 
   <div class="letter-card">
     <div class="image-wrapper">
@@ -98,7 +100,7 @@
     <button class="listen-button" onclick="playSound()">🔊 اضغط للاستماع</button>
   </div>
 
-  <button class="nav-button next" onclick="prevLetter()">⮜</button>
+  <button class="nav-button next" onclick="prevLetter()">👈</button>
 </div>
 
 <!-- ✅ جميع ملفات الصوت المطلوبة -->
