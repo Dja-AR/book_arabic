@@ -6,106 +6,159 @@
   <title>تعلم الأرقام</title>
   <link rel="stylesheet" href="s.css" />
   <style>
-    /* شاشة المقدمة */
-    #intro-screen {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #fef6e4, #e0f7fa);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2.2em;
-      font-weight: bold;
-      color: #333;
-      z-index: 20000;
-      animation: fadeIn 1s ease-in-out;
-    }
+/* 🎬 زر البداية */
+#start-btn {
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  padding: clamp(12px, 2vh, 20px) clamp(20px, 4vw, 40px);
+  background: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s, background 0.2s;
+  animation: pulse 1.5s infinite;
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+}
+#start-btn:hover { background: #e68900; transform: scale(1.1); }
+#start-btn:active { transform: scale(0.95); }
 
-    /* حركة الدخول والخروج */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
 
-    /* --- CSS النافذة المنبثقة تغطي الشاشة بالكامل --- */
-    #game-popup {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(2px);
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-    }
+/* تجاوب */
+@media (max-width: 480px) {
+  #start-btn { font-size: 1rem; padding: 10px 20px; max-width: 280px; }
+}
+@media (min-width: 1024px) {
+  #start-btn { font-size: 2rem; padding: 20px 50px; max-width: 400px; }
+}
 
-    #game-popup.show {
-      display: flex;
-    }
+/* 🎨 أزرار التحكم */
+.button-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+.button-container button {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.3s;
+  animation: pulse 2s infinite;
+}
+.button-container .prev { background: #2196f3; }   /* أزرق */
+.button-container .listen { background: #4caf50; } /* أخضر */
+.button-container .next { background: #ff9800; }   /* برتقالي */
+.button-container .restart { background: #9c27b0; }/* بنفسجي */
 
-    #game-popup .popup-box {
-      background: white;
-      width: 90vw;
-      max-width: 900px;
-      aspect-ratio: 16/10;
-      border-radius: 1.8em;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
-    }
+.button-container button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
 
-    #game-popup iframe {
-      flex: 1;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+/* شاشة البداية */
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #fef6e4, #e0f7fa);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.2em;
+  font-weight: bold;
+  color: #333;
+  z-index: 20000;
+  animation: fadeIn 1s ease-in-out;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* النافذة المنبثقة */
+#game-popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+#game-popup.show { display: flex; }
+#game-popup .popup-box {
+  background: white;
+  width: 90vw;
+  max-width: 900px;
+  aspect-ratio: 16/10;
+  border-radius: 1.8em;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+#game-popup iframe {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
   </style>
 </head>
 <body>
 
-  <!-- شاشة المقدمة -->
-  <div id="intro-screen">
-    🌟 مرحبًا بك في رحلة تعلم الأرقام 🌟
-    <audio id="intro-audio" src="assets/welcome.mp3"></audio>
-  </div>
+<!-- ✅ شاشة البداية -->
+<div id="intro-screen">
+  <h1>🌟 رحلة الأرقام السحرية 🌟</h1>
+  <img src="images/-cartoon-boy.png" alt="رسوم كرتونية" />
+  <button id="start-btn">🚀 هيا نبدأ</button>
+  <audio id="intro-audio" src="assets/welcome.mp3" preload="auto"></audio>
+</div>
 
-  <!-- زر الرئيسية -->
-  <div class="top-bar">
-    <a href="index.html">
-      <button class="home-button">🏠 الرئيسية</button>
-    </a>
-  </div>
+<!-- ✅ زر العودة للرئيسية -->
+<div class="top-bar">
+  <a href="index.html">
+    <button class="home-button">🏠 الرئيسية</button>
+  </a>
+</div>
 
-  <div class="main-wrapper">
-    <!-- زر التالي -->
-    <button class="nav-button next" onclick="nextLetter()">⮞</button>
-
-    <!-- الصورة + زر الاستماع -->
-    <div class="letter-card">
-      <div class="image-wrapper">
-        <img id="image" src="" alt="صورة الرقم" />
-      </div>
-      <button class="listen-button" onclick="playSound()">🔊 اضغط للاستماع</button>
-      <audio id="audio"></audio>
+<!-- ✅ واجهة الأرقام -->
+<div class="main-wrapper" style="display:none;">
+  <div class="letter-card">
+    <div class="image-wrapper">
+      <img id="image" src="images/N0.png" alt="صورة الرقم" />
     </div>
+    <audio id="audio"></audio>
 
-    <!-- زر السابق -->
-    <button class="nav-button prev" onclick="prevLetter()">⮜</button>
-  </div>
-
-  <!-- نافذة اللعبة -->
-  <div id="game-popup">
-    <div class="popup-box">
-      <iframe id="game-frame" src=""></iframe>
-      <div class="popup-buttons" id="popup-buttons"></div>
+    <!-- الأزرار تحت الصورة -->
+    <div class="button-container">
+      <button class="next" onclick="nextLetter()">👉</button>
+      <button class="listen" onclick="playSound()">🔊 استمع</button>
+      <button class="prev" onclick="prevLetter()">👈</button>
+      <button class="restart" onclick="restart()">🔄 إعادة</button>
     </div>
   </div>
+</div>
+
+<!-- ✅ نافذة اللعبة -->
+<div id="game-popup">
+  <div class="popup-box">
+    <iframe id="game-frame" src=""></iframe>
+    <div class="popup-buttons" id="popup-buttons"></div>
+  </div>
+</div>
 
 <script>
 let current = 0;
@@ -123,18 +176,16 @@ const letters = [
   { image: "images/N10.png", sound: "assets/N10.mp3" },
 ];
 
-// تشغيل المقدمة
-window.onload = () => {
-  const introAudio = document.getElementById("intro-audio");
-  introAudio.play().catch(() => {}); // تجاهل مشاكل التشغيل التلقائي
+// بدء التعلم عند الضغط على زر البداية
+document.getElementById("start-btn").onclick = () => {
+  document.getElementById("intro-audio").play().catch(()=>{});
+  const intro = document.getElementById("intro-screen");
+  intro.style.animation = "fadeOut 1s ease-in-out";
   setTimeout(() => {
-    const intro = document.getElementById("intro-screen");
-    intro.style.animation = "fadeOut 1s ease-in-out";
-    setTimeout(() => {
-      intro.style.display = "none";
-      update();
-    }, 1000);
-  }, 4000);
+    intro.style.display = "none";
+    document.querySelector(".main-wrapper").style.display = "block";
+    update();
+  }, 1000);
 };
 
 function update() {
@@ -143,22 +194,22 @@ function update() {
 }
 
 function nextLetter() {
-  current++;
-  if (current >= letters.length) current = letters.length - 1;
+  if (current < letters.length - 1) current++;
   update();
-
   if (current === 4 || current === 8) {
     openGamePopup();
   } else if (current === letters.length - 1) {
-    setTimeout(() => {
-      openGamePopup();
-    }, 10000);
+    setTimeout(openGamePopup, 2000);
   }
 }
 
 function prevLetter() {
-  current--;
-  if (current < 0) current = 0;
+  if (current > 0) current--;
+  update();
+}
+
+function restart() {
+  current = 0;
   update();
 }
 
@@ -171,35 +222,21 @@ function playSound() {
 
 function openGamePopup() {
   document.getElementById("audio").pause();
-
   let group;
   if (current === 4) group = 1;
   else if (current === 8) group = 2;
   else if (current === letters.length - 1) group = 3;
-  else group = 0;
 
   document.getElementById("game-frame").src = `gamess.html?group=${group}`;
 
   const popupBtns = document.getElementById("popup-buttons");
   popupBtns.innerHTML = "";
 
-  if (group === 1 || group === 2) {
-    const contBtn = document.createElement("button");
-    contBtn.className = "continue-btn";
-    contBtn.textContent = "استمر التعلم";
-    contBtn.onclick = closeGamePopup;
-    popupBtns.appendChild(contBtn);
-  } else if (group === 3) {
-    const contBtn = document.createElement("button");
-    contBtn.className = "continue-btn";
-    contBtn.textContent = "استمر في اللعب";
-    contBtn.onclick = () => {
-      const audioEnd = new Audio("assets/end.mp3");
-      audioEnd.play();
-      closeGamePopup();
-    };
-    popupBtns.appendChild(contBtn);
-  }
+  const contBtn = document.createElement("button");
+  contBtn.className = "continue-btn";
+  contBtn.textContent = (group === 3) ? "🎉 أحسنت! العودة" : "✅ استمر التعلم";
+  contBtn.onclick = closeGamePopup;
+  popupBtns.appendChild(contBtn);
 
   document.getElementById("game-popup").classList.add("show");
   document.body.style.overflow = "hidden";

@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>تعلم الحروف</title>
   <link rel="stylesheet" href="s.css" />
-</head>
-<style>
-/* زر البداية */
+  <style>
+  
+/* 🎬 زر البداية */
 #start-btn {
-  font-size: clamp(1.2rem, 2vw, 2rem);   /* الحجم يتأقلم مع الشاشة */
+  font-size: clamp(1.2rem, 2vw, 2rem);
   padding: clamp(12px, 2vh, 20px) clamp(20px, 4vw, 40px);
   background: #ff9800;
   color: white;
@@ -19,22 +19,17 @@
   margin-top: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: transform 0.2s, background 0.2s;
-
-  /* أنيميشن نابض */
   animation: pulse 1.5s infinite;
-
   width: 100%;
-  max-width: 350px;  /* 🚀 يبقى ثابت وما يكبرش بزاف */
+  max-width: 350px;
   text-align: center;
 }
 
-/* عند المرور */
 #start-btn:hover {
   background: #e68900;
   transform: scale(1.1);
 }
 
-/* عند الضغط */
 #start-btn:active {
   transform: scale(0.95);
 }
@@ -45,8 +40,78 @@
   50%  { transform: scale(1.08); }
   100% { transform: scale(1); }
 }
- 
+
+/* 📱 تجاوب زر البداية مع الهواتف */
+@media (max-width: 480px) {
+  #start-btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 12px;
+    max-width: 280px;
+  }
+}
+
+/* 💻 للشاشات الكبيرة */
+@media (min-width: 1024px) {
+  #start-btn {
+    font-size: 2rem;
+    padding: 20px 50px;
+    max-width: 400px;
+  }
+}
+
+/* 🎨 أزرار التحكم (التالي - السابق - استمع - إعادة) */
+.button-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button-container button {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.3s;
+  animation: pulse 2s infinite; /* نفس الأنيميشن لجذب الانتباه */
+}
+
+/* 🌈 ألوان مختلفة لكل زر */
+.button-container .prev {
+  background: #2196f3;   /* أزرق */
+}
+.button-container .listen {
+  background: #4caf50;   /* أخضر */
+}
+.button-container .next {
+  background: #ff9800;   /* برتقالي */
+}
+.button-container .restart {
+  background: #9c27b0;   /* بنفسجي */
+}
+
+/* ✨ تأثير عند المرور */
+.button-container button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* 📱 تجاوب الأزرار مع الهواتف */
+@media (max-width: 480px) {
+  .button-container button {
+    font-size: 1rem;
+    padding: 10px 16px;
+    border-radius: 10px;
+  }
+}
+
   </style>
+</head>
 <body>
 
 <!-- ✅ نافذة التقدم بعد كل 5 حروف -->
@@ -74,12 +139,11 @@
   <p id="typed-text"></p>
   <img src="images/-cartoon-boy.png" alt="رسوم كرتونية" />
   
- <!-- زر البداية -->
- <button id="start-btn">🚀 هيا نبدأ</button>
+  <!-- زر البداية -->
+  <button id="start-btn">🚀 هيا نبدأ</button>
 
- <!-- صوت الترحيب -->
- <audio id="motivation-audio" src="assets/Welcome2.mp3" preload="auto"></audio>
-</div>
+  <!-- صوت الترحيب -->
+  <audio id="motivation-audio" src="assets/Welcome2.mp3" preload="auto"></audio>
 </div>
 
 <!-- ✅ زر العودة للرئيسية -->
@@ -91,16 +155,19 @@
 
 <!-- ✅ واجهة الحروف -->
 <div class="main-wrapper">
-  <button class="nav-button prev" onclick="nextLetter()">👉</button>
-
   <div class="letter-card">
     <div class="image-wrapper">
       <img id="image" src="images/A1.png" alt="صورة الحرف" />
     </div>
-    <button class="listen-button" onclick="playSound()">🔊 اضغط للاستماع</button>
-  </div>
 
-  <button class="nav-button next" onclick="prevLetter()">👈</button>
+    <!-- الأزرار تحت الصورة -->
+    <div class="button-container">
+        <button class="next" onclick="nextLetter()">👉</button>
+      <button class="listen" onclick="playSound()">🔊 استمع</button>
+      <button class="prev" onclick="prevLetter()">👈</button>
+      <button class="restart" onclick="restart()">🔄 إعادة</button>
+    </div>
+  </div>
 </div>
 
 <!-- ✅ جميع ملفات الصوت المطلوبة -->
@@ -114,10 +181,6 @@
 
 <!-- ✅ سكربت الجافاسكربت -->
 <script src="letters.js"></script>
-
-<!-- ✅ إخفاء شاشة المقدمة تلقائيًا -->
-
-
 
 </body>
 </html>
