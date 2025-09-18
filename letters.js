@@ -1,3 +1,4 @@
+// 📌 بيانات الحروف
 const letters = [
   { image: "images/1.png", sound: "assets/1.mp3" },
   { image: "images/2.png", sound: "assets/2.mp3" },
@@ -31,20 +32,20 @@ const letters = [
 
 let current = 0;
 
+// ✅ تحديث الصورة والصوت حسب العنصر الحالي
 function update() {
   const letter = letters[current];
   document.getElementById("image").src = letter.image;
   document.getElementById("audio").src = letter.sound;
 }
 
+// ▶️ الحرف التالي
 function nextLetter() {
   current++;
   if (current < letters.length) {
     update();
     if (current % 5 === 0) {
-      setTimeout(() => {
-        showStarPopup();
-      }, 500);
+      setTimeout(showStarPopup, 500); // popup بعد كل 5 حروف
     }
   } else {
     document.getElementById("success-popup").style.display = "flex";
@@ -52,26 +53,21 @@ function nextLetter() {
   }
 }
 
+// ◀️ الحرف السابق
 function prevLetter() {
   current = (current - 1 + letters.length) % letters.length;
   update();
 }
 
+// 🔊 تشغيل صوت الحرف
 function playSound() {
   const mainAudio = document.getElementById("audio");
-
   mainAudio.pause();
   mainAudio.currentTime = 0;
   mainAudio.play();
-
-  // تشغيل مؤثر تفاعلي بعد الصوت
-  const interactionAudio = document.getElementById("interaction-audio");
-  if (interactionAudio) {
-    interactionAudio.currentTime = 0;
-    interactionAudio.play();
-  }
 }
 
+// 🌟 إظهار نافذة النجوم
 function showStarPopup() {
   document.getElementById("star-popup").style.display = "flex";
 
@@ -83,119 +79,44 @@ function showStarPopup() {
 
   bravoAudio.play();
   funAudio.play();
-
-  // إضافة صوت الحكاية التعليمية حسب الرقم
-  const storyAudio = document.getElementById("story-audio");
-  if (storyAudio) {
-    storyAudio.src = `assets/stories/story${current}.mp3`;
-    storyAudio.currentTime = 0;
-    storyAudio.play();
-  }
 }
 
+// ✅ استمرار التعلم بعد البوب أب
 function continueLearning() {
   document.getElementById("star-popup").style.display = "none";
 
   const funAudio = document.getElementById("fun-audio");
   funAudio.pause();
   funAudio.currentTime = 0;
-
-  const storyAudio = document.getElementById("story-audio");
-  if (storyAudio) {
-    storyAudio.pause();
-    storyAudio.currentTime = 0;
-  }
 }
 
+// ❌ غلق النافذة النهائية
 function closePopup() {
   document.getElementById("success-popup").style.display = "none";
 }
 
+// 🎬 عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
   update();
 
-  const text = "أهلاً بكم يا أصدقاء! اليوم سنبدأ رحلة ممتعة لتعلم الحروف العربية! هل أنتم مستعدون؟ هيا بنا!";
-  const textElement = document.getElementById("typed-text");
-  const audio = document.getElementById("motivation-audio");
+  // زر البداية
+  const startBtn = document.getElementById("start-btn");
+  const intro = document.getElementById("intro-screen");
+  const introAudio = document.getElementById("intro-audio");
 
-  let index = 0;
-  let soundPlayed = false;
+  startBtn.addEventListener("click", () => {
+    // ✅ تشغيل الصوت بعد الكبس
+    introAudio.currentTime = 0;
+    introAudio.play().catch(() => {});
 
-  function typeText() {
-    if (!soundPlayed) {
-      audio.play().catch((error) => {
-        console.warn("⚠️ لم يتم تشغيل الصوت تلقائيًا: ", error);
-      });
-      soundPlayed = true;
-    }
-
-    if (index < text.length) {
-      textElement.innerHTML += text.charAt(index);
-      index++;
-      setTimeout(typeText, 80);
-    }
-  }
-
-  window.onload = typeText;
-
-  setTimeout(() => {
-    const intro = document.getElementById("intro-screen");
-    if (intro) {
-      intro.style.display = "none";
-    }
-  }, 8000);
-});
-setTimeout(() => {
-    const intro = document.getElementById("intro-screen");
-    if (intro) {
-      intro.style.display = "none";
-    }
-  }, 8000); // بعد 8 ثواني
-
-  function goToGame() {
-    window.location.href = "games.html";
-  }
-  // عناصر شاشة البداية
-const startBtn = document.getElementById("start-btn");
-const intro = document.getElementById("intro-screen");
-const welcomeAudio = document.getElementById("welcome-audio");
-
-
-
-function goToLesson() {
-  intro.style.display = "none";
-  // يفترض وجود showDay/currentIndex عندك
-  if (typeof showDay === "function") {
-    window.currentIndex = window.currentIndex || 0;
-    showDay(window.currentIndex);
-  }
-}
-
-startBtn.addEventListener("click", async () => {
-  try {
-    // تأكد من المصدر، أعد الضبط، ثم شغّل في حدث النقر (مسموح لجميع المتصفحات)
-    if (!welcomeAudio.src.includes(".mp3")) welcomeAudio.src = SAFE_SRC;
-    welcomeAudio.currentTime = 0;
-    welcomeAudio.volume = 1;
-    await welcomeAudio.play();
-    console.log("✅ تم تشغيل صوت الترحيب");
-  } catch (err) {
-    console.warn("⚠️ المتصفح منع التشغيل أو الملف غير صالح:", err);
-    // في بعض الأجهزة (iOS) قد يلزم تكرار النقر أو التأكد من مستوى الصوت/زر الصمت
-  } finally {
-    // انتقل للدرس بع65 ثوانٍ مهما كان
-    setTimeout(goToLesson, 9000);
-  }
-});
-
-// لوجات مفيدة للتشخيص
-welcomeAudio.addEventListener("canplaythrough", () => {
-  console.log("🎵 ملف الصوت جاهز للتشغيل:", welcomeAudio.src);
-});
-
-welcomeAudio.addEventListener("error", () => {
-  const e = welcomeAudio.error;
-  const codes = {1: "ABORTED", 2: "NETWORK", 3: "DECODE", 4: "SRC_NOT_SUPPORTED"};
-  console.error("❌ خطأ في ملف الصوت:", codes[e?.code] || e);
-  alert("تعذّر تحميل الصوت. تأكد أن الملف موجود في: " + welcomeAudio.src);
+    // انتظار 3 ثواني قبل الدخول
+    setTimeout(() => {
+      intro.style.animation = "fadeOut 1s ease-in-out";
+      setTimeout(() => {
+        intro.style.display = "none";
+        document.querySelector(".main-wrapper").style.display = "block";
+        update();
+      }, 1000);
+    }, 3000);
+  });
 });

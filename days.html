@@ -5,125 +5,188 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>تعلم أيام الأسبوع</title>
   <link rel="stylesheet" href="s.css" />
-</head>
-<style>
-/* ✅ صور كبيرة وواضحة للأطفال */
+  <style>
+/* ================= شاشة البداية ================= */
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #fef6e4, #e0f7fa);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 2000;
+  padding: 20px;
+}
+#intro-screen img {
+  max-width: 250px;
+  width: 100%;
+  height: auto;
+  margin: 20px 0;
+}
+#start-btn {
+  font-size: 2rem;
+  padding: 20px 40px;
+  background: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s, background 0.2s;
+  animation: pulse 1.5s infinite;
+}
+#start-btn:hover { background: #e68900; transform: scale(1.1); }
+#start-btn:active { transform: scale(0.95); }
+@keyframes pulse { 0%{transform:scale(1);}50%{transform:scale(1.1);}100%{transform:scale(1);} }
+
+/* ================= واجهة التعلم ================= */
+.main-wrapper {
+  display: none;
+  padding: 20px;
+  text-align: center;
+}
+.letter-card h1 {
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+}
+.image-wrapper {
+  margin-bottom: 30px;
+}
 .image-wrapper img {
-  max-width: 300px;   /* العرض الأقصى للصورة */
-  max-height: 300px;  /* الارتفاع الأقصى للصورة */
+  max-width: 100%;
+  max-height: 300px;
   width: auto;
   height: auto;
   object-fit: contain;
   display: block;
   margin: 0 auto;
 }
-/* زر البداية */
-#start-btn {
-  font-size: 2rem;          
-  padding: 20px 40px;       
-  background: #ff9800;      
-  color: white;
+
+/* الأزرار تحت الصورة */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.button-container button {
+  font-size: 1.2rem;
+  padding: 10px 20px;
   border: none;
-  border-radius: 15px;      
+  border-radius: 12px;
   cursor: pointer;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  color: white;
+  background: #2196f3;
   transition: transform 0.2s, background 0.2s;
-
-  /* أنيميشن نابض */
-  animation: pulse 1.5s infinite;
 }
+.button-container .listen { background: #4caf50; }
+.button-container .restart { background: #9c27b0; }
+.button-container button:hover { transform: scale(1.1); }
 
-/* عند المرور عليه يكبر أكثر */
-#start-btn:hover {
-  background: #e68900;
-  transform: scale(1.2);
+/* ================= زر التهنئة ================= */
+#congrats {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.5s ease-in-out;
 }
-
-/* عند الضغط */
-#start-btn:active {
-  transform: scale(0.95);
-}
-
-/* حركة نابض */
-@keyframes pulse {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-/* ✅ مسافة إضافية تحت الصورة لظهور الأزرار */
-.image-wrapper {
-  margin-bottom: 30px;
-}
-#start-btn {
-  background: #ff9800;   /* برتقالي جميل */
-  color: white;
-  font-size: 2rem;       /* خط كبير */
-  font-weight: bold;
-  padding: 15px 40px;
-  border: none;
+#congrats .popup-box {
+  background: white;
+  max-width: 500px;
+  width: 90%;
+  padding: 20px;
   border-radius: 15px;
+  text-align: center;
+}
+#congrats img {
+  max-width: 150px;
+  margin: 15px 0;
+}
+.game-btn {
+  background: #4CAF50;
+  color: white;
+  font-size: 1.2rem;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 12px;
+  margin-top: 10px;
   cursor: pointer;
-  margin-top: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease, background 0.3s ease;
+  transition: transform 0.2s, background 0.2s;
+}
+.game-btn:hover { background: #45a049; transform: scale(1.1); }
+
+/* ================= نافذة اللعبة ================= */
+#game-popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+#game-popup.show { display: flex; }
+#game-popup .popup-box {
+  background: white;
+  width: 95%;
+  max-width: 900px;
+  height: 90%;
+  max-height: 600px;
+  border-radius: 1.5em;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+#game-popup iframe {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
-#start-btn:hover {
-  background: #e68900;
-  transform: scale(1.1);
+/* 📱 تجاوب إضافي */
+@media (max-width: 480px) {
+  #start-btn { font-size: 1rem; padding: 10px 20px; max-width: 280px; }
+  #game-popup .popup-box { height: 80%; }
+}
+@media (min-width: 1024px) {
+  #start-btn { font-size: 2rem; padding: 20px 50px; max-width: 400px; }
+  #game-popup .popup-box { height: 70%; }
 }
 
-  /* --- CSS النافذة المنبثقة تغطي الشاشة بالكامل --- */
-  #game-popup {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(2px);
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-    }
+/* ================= تجاوب الهواتف ================= */
+@media (max-width: 600px) {
+  #start-btn { font-size: 1.2rem; padding: 15px 30px; }
+  .image-wrapper img { max-height: 200px; }
+  #game-popup .popup-box { width: 98vw; height: 80vh; }
+  .button-container button { font-size: 1rem; padding: 8px 15px; }
+}
 
-    #game-popup.show {
-      display: flex;
-    }
+/* ================= Animations ================= */
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 
-    #game-popup .popup-box {
-      background: white;
-      width: 90vw;
-      max-width: 900px;
-      aspect-ratio: 16/10;
-      border-radius: 1.8em;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
-    }
-
-    #game-popup iframe {
-      flex: 1;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-</style>
+  </style>
+</head>
 <body>
 
-<!-- ✅ شاشة البداية -->
-<div id="intro-screen">
-  <h1>هيا نتعلم أيام الأسبوع! 🎉</h1>
-  <p id="typed-text">ستتعلم كل يوم مع صورة وصوت ممتع</p>
-  <img src="images/-cartoon-boy.png" alt="رسوم كرتونية" />
-
-  <!-- زر البداية -->
-  <button id="start-btn">🚀 هيا نبدأ</button>
-
-  <!-- صوت الترحيب -->
-  <audio id="welcome-audio" src="assets/introday" preload="auto"></audio>
-</div>
+  <!-- شاشة البداية -->
+  <div id="intro-screen">
+    <h1>هيا نتعلم أيام الأسبوع! 🎉</h1>
+    <p id="typed-text">ستتعلم كل يوم مع صورة وصوت ممتع</p>
+    <img src="images/-cartoon-boy.png" alt="رسوم كرتونية" />
+    <button id="start-btn">🚀 هيا نبدأ</button>
+    <audio id="welcome-audio" src="assets/introday.mp3" preload="auto"></audio>
+  </div>
 
   <!-- زر الرئيسية -->
   <div class="top-bar">
@@ -132,226 +195,45 @@
     </a>
   </div>
 
+  <!-- واجهة التعلم -->
   <div class="main-wrapper">
-  
-    <!-- زر التالي -->
-    <button class="nav-button next" onclick="nextDay()">⮞</button>
-    
-
-    <!-- بطاقة اليوم (مهم: class يطابق CSS الخاص بك) -->
     <div class="letter-card">
       <h1 id="dayName"></h1>
       <div class="image-wrapper">
         <img id="image" src="" alt="صورة اليوم" />
       </div>
-      <button class="listen-button" onclick="playSound()">🔊 اضغط للاستماع</button>
       <audio id="audio"></audio>
-    </div>
 
-    <button class="nav-button prev" onclick="prevDay()">⮜</button>
-  </div>
+      <div class="button-container">
+     <button class="next" onclick="nextLetter()">👉</button>
 
-
-  </div>
-<!-- ✅ زر التهنئة -->
-<div id="congrats" class="popup-container" style="display:none;">
-  <div class="popup-box">
-    <h2>🎉 أحسنت! لقد تعلمت أيام الأسبوع 👏</h2>
-    <img src="images/congrats.png" alt="مبروك" />
-    <button onclick="restart()">🔄 إعادة من البداية</button>
-    <button onclick="goToGame()" class="game-btn">🎮 هيا نلعب</button>
-  </div>
-</div>
-
-<!-- ✅ نافذة اللعبة -->
-<div id="game-popup">
-  <div class="popup-box">
-    <h2 style="margin:10px;">🎮 لعبة أيام الأسبوع</h2>
-    <iframe id="game-frame" src=""></iframe>
-    <div style="padding:10px; text-align:center;">
-      <button onclick="closeGame()">❌ إغلاق</button>
+        <button class="listen" onclick="playSound()">🔊 استمع</button>
+        <button class="prev" onclick="prevLetter()">👈</button>    
+        <button class="restart" onclick="restart()">🔄 إعادة</button>
+      </div>
     </div>
   </div>
-</div>
 
-<style>
-  /* --- CSS النافذة المنبثقة تغطي الشاشة بالكامل --- */
-  #game-popup {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(2px);
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-  }
+  <!-- زر التهنئة -->
+  <div id="congrats">
+    <div class="popup-box">
+      <h2>🎉 أحسنت! لقد تعلمت أيام الأسبوع 👏</h2>
+      <img src="images/congrats.png" alt="مبروك" />
+      <button onclick="restart()">🔄 إعادة من البداية</button>
+      <button onclick="goToGame()" class="game-btn">🎮 هيا نلعب</button>
+    </div>
+  </div>
 
-  #game-popup.show {
-    display: flex;
-  }
+  <!-- نافذة اللعبة -->
+  <div id="game-popup">
+    <div class="popup-box">
+      <iframe id="game-frame" src=""></iframe>
+      <div class="popup-buttons" id="popup-buttons"></div>
+    </div>
+  </div>
 
-  #game-popup .popup-box {
-    background: white;
-    width: 90vw;
-    max-width: 900px;
-    aspect-ratio: 16/10;
-    border-radius: 1.8em;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
-  }
-
-  #game-popup iframe {
-    flex: 1;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  .game-btn {
-    background: #4CAF50;
-    color: white;
-    font-size: 1.2rem;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 12px;
-    margin-top: 10px;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
-  }
-
-  .game-btn:hover {
-    background: #45a049;
-    transform: scale(1.1);
-  }
-</style>
-
-<script>
-  // فتح اللعبة
-  function goToGame() {
-    document.getElementById("game-frame").src = "gamesDays.html"; // ملف اللعبة
-    document.getElementById("game-popup").classList.add("show");
-  }
-
-  // إغلاق اللعبة
-  function closeGame() {
-    document.getElementById("game-popup").classList.remove("show");
-    document.getElementById("game-frame").src = ""; // تفريغ عند الإغلاق
-  }
-</script>
-
-  <!-- ================= JS المدمج ================= -->
-  <script>
-  // مصفوفة الأيام (الاسم + الصورة + الصوت)
-const days = [
-  { name: "الأحد",    image: "images/sunday.png",    sound: "assets/sunday.mp3" },
-  { name: "الإثنين",  image: "images/monday.png",    sound: "assets/monday.mp3" },
-  { name: "الثلاثاء",  image: "images/tuesday.png",   sound: "assets/tuesday.mp3" },
-  { name: "الأربعاء",  image: "images/wednesday.png", sound: "assets/wednesday.mp3" },
-  { name: "الخميس",    image: "images/thursday.png",  sound: "assets/thursday.mp3" },
-  { name: "الجمعة",    image: "images/friday.png",    sound: "assets/friday.mp3" },
-  { name: "السبت",     image: "images/saturday.png",  sound: "assets/saturday.mp3" }
-];
-
-let currentIndex = 0;
-
-// عناصر HTML
-const dayName  = document.getElementById("dayName");
-const image    = document.getElementById("image");
-const audio    = document.getElementById("audio");
-const congrats = document.getElementById("congrats");
-
-// زر البداية
-// عناصر شاشة البداية
-const startBtn = document.getElementById("start-btn");
-const intro = document.getElementById("intro-screen");
-const welcomeAudio = document.getElementById("welcome-audio");
-
-// لو ما كانش فيه امتداد.. حسّن المسار تلقائياً
-const SAFE_SRC = "assets/introday.mp3";
-if (!welcomeAudio.getAttribute("src") || !welcomeAudio.getAttribute("src").includes(".mp3")) {
-  welcomeAudio.src = SAFE_SRC;
-}
-
-function goToLesson() {
-  intro.style.display = "none";
-  // يفترض وجود showDay/currentIndex عندك
-  if (typeof showDay === "function") {
-    window.currentIndex = window.currentIndex || 0;
-    showDay(window.currentIndex);
-  }
-}
-
-startBtn.addEventListener("click", async () => {
-  try {
-    // تأكد من المصدر، أعد الضبط، ثم شغّل في حدث النقر (مسموح لجميع المتصفحات)
-    if (!welcomeAudio.src.includes(".mp3")) welcomeAudio.src = SAFE_SRC;
-    welcomeAudio.currentTime = 0;
-    welcomeAudio.volume = 1;
-    await welcomeAudio.play();
-    console.log("✅ تم تشغيل صوت الترحيب");
-  } catch (err) {
-    console.warn("⚠️ المتصفح منع التشغيل أو الملف غير صالح:", err);
-    // في بعض الأجهزة (iOS) قد يلزم تكرار النقر أو التأكد من مستوى الصوت/زر الصمت
-  } finally {
-    // انتقل للدرس بعد 5 ثوانٍ مهما كان
-    setTimeout(goToLesson, 5000);
-  }
-});
-
-// لوجات مفيدة للتشخيص
-welcomeAudio.addEventListener("canplaythrough", () => {
-  console.log("🎵 ملف الصوت جاهز للتشغيل:", welcomeAudio.src);
-});
-
-welcomeAudio.addEventListener("error", () => {
-  const e = welcomeAudio.error;
-  const codes = {1: "ABORTED", 2: "NETWORK", 3: "DECODE", 4: "SRC_NOT_SUPPORTED"};
-  console.error("❌ خطأ في ملف الصوت:", codes[e?.code] || e);
-  alert("تعذّر تحميل الصوت. تأكد أن الملف موجود في: " + welcomeAudio.src);
-});
-
-// تحديث العرض
-function showDay(index) {
-  if (index >= 0 && index < days.length) {
-    dayName.textContent = days[index].name;
-    image.src = days[index].image;
-    audio.src = days[index].sound;
-    congrats.style.display = "none"; 
-  } else if (index === days.length) {
-    congrats.style.display = "flex"; 
-  }
-}
-
-// تشغيل صوت اليوم الحالي
-function playSound() {
-  if (audio && audio.src) audio.play().catch(() => {});
-}
-
-// زر التالي
-function nextDay() {
-  if (currentIndex < days.length) {
-    currentIndex++;
-    showDay(currentIndex);
-  }
-}
-
-// زر السابق
-function prevDay() {
-  if (currentIndex > 0) {
-    currentIndex--;
-    showDay(currentIndex);
-  }
-}
-
-// إعادة من البداية
-function restart() {
-  currentIndex = 0;
-  showDay(currentIndex);
-}
-</script>
+  <!-- رابط JS الخارجي -->
+  <script src="days.js"></script>
 
 </body>
 </html>

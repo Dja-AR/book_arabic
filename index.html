@@ -6,67 +6,58 @@
   <title>مرحبًا يا أصدقاء</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* شاشة الترحيب */
-    .logo-screen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      font-family: 'Cairo', sans-serif;
-      text-align: center;
-      animation: fadeIn 1s ease-in-out;
-      padding: 20px;
-      box-sizing: border-box; /* باش المارجين والبادينج يتحسبوا صح */
-    }
-  
-    .logo-title {
-      font-size: 3.5rem; /* تكبير العنوان */
-      color: #ff5722;
-      font-weight: bold;
-      margin-bottom: 15px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-      animation: zoomIn 1s ease-in-out;
-      line-height: 1.3; /* باش ما يلصقش النص */
-      word-wrap: break-word; /* يكسر السطر إذا كان طويل */
-    }
-  
-    .logo-subtitle {
-      font-size: 2rem; /* تكبير الشعار */
-      color: #444;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
-      animation: fadeIn 2s ease-in-out;
-      line-height: 1.4;
-      word-wrap: break-word;
-    }
-  
-    /* نسخة الهاتف */
-    @media (max-width: 768px) {
-      .logo-title {
-        font-size: 2rem;  /* أصغر باش يبان مليح في الهاتف */
-        margin-bottom: 10px;
-      }
-      .logo-subtitle {
-        font-size: 1.2rem;
-        padding: 0 10px; /* باش النص ما يلصقش في الحافة */
-      }
-      .logo-screen {
-        padding: 15px; /* يقلل البادينج باش يبان كلش */
-      }
-    }
-  
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
-  
-    @keyframes zoomIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
+/* 🎉 شاشة الترحيب */
+.logo-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  font-family: 'Cairo', sans-serif;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+  padding: clamp(10px, 3vw, 30px);
+  box-sizing: border-box;
+}
+
+/* 🏷️ العنوان */
+.logo-title {
+  font-size: clamp(2rem, 6vw, 3.5rem); /* يتأقلم مع حجم الشاشة */
+  color: #ff5722;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  animation: zoomIn 1s ease-in-out;
+  line-height: 1.3;
+  word-wrap: break-word;
+  max-width: 90%; /* ما يخرجش على الشاشة */
+}
+
+/* ✨ الشعار */
+.logo-subtitle {
+  font-size: clamp(1.2rem, 4vw, 2rem); /* مرن تلقائي */
+  color: #444;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  animation: fadeIn 2s ease-in-out;
+  line-height: 1.4;
+  word-wrap: break-word;
+  max-width: 90%;
+}
+
+/* 🌀 أنيميشن */
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
   </style>
   
   
