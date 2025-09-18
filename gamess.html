@@ -11,10 +11,11 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   font-family: "Cairo", sans-serif;
+  background: #f0f4f8;
 }
 
+/* حاويات عامة */
 body > * {
   width: 100%;
   height: 100%;
@@ -23,8 +24,10 @@ body > * {
 
 /* الشاشات */
 #startScreen, #gameScreen, #endScreen {
-  width: 900px;
-  height: 600px;
+  width: 95%;
+  max-width: 900px;
+  height: auto;
+  min-height: 80vh;
   background: white;
   border-radius: 1.8em;
   box-shadow: 0 0 30px rgba(0,0,0,0.1);
@@ -34,8 +37,10 @@ body > * {
   align-items: center;
   position: relative;
   margin: auto;
+  padding: 2vh 2vw;
 }
 
+/* شاشة البداية */
 #startScreen {
   background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
   color: white;
@@ -45,32 +50,36 @@ body > * {
 }
 
 #startScreen h1 {
-  font-size: 48px;
+  font-size: clamp(1.5rem, 4vw, 3rem);
   font-weight: 700;
   text-shadow: 0 0 6px rgba(0,0,0,0.3);
+  margin: 0.5em 0;
 }
 
 #startScreen button {
-  font-size: 24px;
-  padding: 1em 4em;
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
+  padding: clamp(10px, 2vh, 20px) clamp(20px, 5vw, 40px);
   border: none;
   background: #fdcb6e;
   border-radius: 3em;
   cursor: pointer;
   box-shadow: 0 5px 15px rgba(253,203,110,0.7);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  max-width: 320px;
 }
 #startScreen button:hover {
   background: #f7b731;
   box-shadow: 0 7px 20px rgba(247,183,49,0.85);
+  transform: scale(1.05);
 }
 
+/* إخفاء اللعبة */
 #gameScreen.hidden { display: none; }
 
 .frame {
-  padding: 20px 30px;
+  padding: 5vw 4vw;
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -79,19 +88,21 @@ body > * {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 .score, .timer {
   background: #f9f9f9;
   padding: 10px 20px;
   border-radius: 1em;
-  font-size: 22px;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
   font-weight: 700;
   box-shadow: inset 0 0 8px rgba(0,0,0,0.06);
-  min-width: 120px;
+  min-width: 100px;
   text-align: center;
 }
 h1#questionText {
-  font-size: 32px;
+  font-size: clamp(1.2rem, 3vw, 2rem);
   font-weight: 700;
   margin-bottom: 20px;
   text-align: center;
@@ -103,19 +114,20 @@ h1#questionText {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 60px;
+  gap: clamp(20px, 5vw, 60px);
   flex-wrap: wrap;
 }
 
 /* صورة السؤال */
 .left-card {
-  width: 350px;
-  height: 350px;
+  width: clamp(200px, 40vw, 350px);
+  height: clamp(200px, 40vw, 350px);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  border-radius: 1em;
 }
 .left-card img {
   width: 100%;
@@ -128,24 +140,24 @@ h1#questionText {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  gap: 30px;
+  gap: clamp(15px, 4vw, 30px);
   max-width: 500px;
 }
 .option {
-  width: 100px;
-  height: 100px;
+  width: clamp(70px, 20vw, 100px);
+  height: clamp(70px, 20vw, 100px);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 36px;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 8px 15px rgba(0,0,0,0.25);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .option.circle { border-radius: 50%; }
-.option:hover { transform: scale(1.2); }
+.option:hover { transform: scale(1.15); }
 
 .option.blue    { background: linear-gradient(135deg,#39a7f8,#0b7fe0); }
 .option.red     { background: linear-gradient(135deg,#ff5e6c,#ff3b5c); }
@@ -160,14 +172,18 @@ h1#questionText {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 .nav-buttons button {
-  font-size: 20px;
-  padding: 12px 30px;
+  font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+  padding: 10px 20px;
   border: none;
   border-radius: 1.2em;
   background: #ddd;
   cursor: pointer;
+  flex: 1;
+  min-width: 120px;
 }
 .nav-buttons button:hover { background: #bbb; }
 .nav-buttons button:disabled { background: #f0f0f0; cursor: not-allowed; }
@@ -180,14 +196,14 @@ h1#questionText {
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg,#27ae60,#2ecc71);
-  padding: 30px 50px;
+  padding: clamp(20px, 5vw, 40px);
   border-radius: 2em;
   box-shadow: 0 0 35px rgba(46,204,113,0.9);
   text-align: center;
   z-index: 10000;
   color: white;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
 }
-
 
 </style>
 </head>

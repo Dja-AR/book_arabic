@@ -32,14 +32,6 @@
   100% { transform: scale(1); }
 }
 
-/* تجاوب */
-@media (max-width: 480px) {
-  #start-btn { font-size: 1rem; padding: 10px 20px; max-width: 280px; }
-}
-@media (min-width: 1024px) {
-  #start-btn { font-size: 2rem; padding: 20px 50px; max-width: 400px; }
-}
-
 /* 🎨 أزرار التحكم */
 .button-container {
   display: flex;
@@ -87,7 +79,7 @@
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
-/* النافذة المنبثقة */
+/* 🪟 النافذة المنبثقة */
 #game-popup {
   display: none;
   position: fixed;
@@ -101,13 +93,15 @@
 #game-popup.show { display: flex; }
 #game-popup .popup-box {
   background: white;
-  width: 90vw;
+  width: 95%;
   max-width: 900px;
-  aspect-ratio: 16/10;
-  border-radius: 1.8em;
+  height: 90%;
+  max-height: 600px;
+  border-radius: 1.5em;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 #game-popup iframe {
   flex: 1;
@@ -115,6 +109,17 @@
   height: 100%;
   border: none;
 }
+
+/* 📱 تجاوب إضافي */
+@media (max-width: 480px) {
+  #start-btn { font-size: 1rem; padding: 10px 20px; max-width: 280px; }
+  #game-popup .popup-box { height: 80%; }
+}
+@media (min-width: 1024px) {
+  #start-btn { font-size: 2rem; padding: 20px 50px; max-width: 400px; }
+  #game-popup .popup-box { height: 70%; }
+}
+
   </style>
 </head>
 <body>
@@ -122,11 +127,10 @@
 <!-- ✅ شاشة البداية -->
 <div id="intro-screen">
   <h1>🌟 رحلة الأرقام السحرية 🌟</h1>
-  <img src="images/-cartoon-boy.png" alt="رسوم كرتونية" />
+  <img src="images/-cartoon-boy.png" alt="رسوم كرتونية" style="max-width: 250px; margin: 20px 0;" />
   <button id="start-btn">🚀 هيا نبدأ</button>
-  <audio id="intro-audio" src="assets/welcome.mp3" preload="auto"></audio>
+  <audio id="intro-audio" src="assets/Numb.mp3" preload="auto"></audio>
 </div>
-
 <!-- ✅ زر العودة للرئيسية -->
 <div class="top-bar">
   <a href="index.html">
@@ -160,6 +164,7 @@
   </div>
 </div>
 
+
 <script>
 let current = 0;
 const letters = [
@@ -178,14 +183,20 @@ const letters = [
 
 // بدء التعلم عند الضغط على زر البداية
 document.getElementById("start-btn").onclick = () => {
-  document.getElementById("intro-audio").play().catch(()=>{});
-  const intro = document.getElementById("intro-screen");
-  intro.style.animation = "fadeOut 1s ease-in-out";
+  const introAudio = document.getElementById("intro-audio");
+  introAudio.currentTime = 0;
+  introAudio.play().catch(()=>{});
+
+  // ننتظر 2 ثواني قبل الدخول
   setTimeout(() => {
-    intro.style.display = "none";
-    document.querySelector(".main-wrapper").style.display = "block";
-    update();
-  }, 1000);
+    const intro = document.getElementById("intro-screen");
+    intro.style.animation = "fadeOut 1s ease-in-out";
+    setTimeout(() => {
+      intro.style.display = "none";
+      document.querySelector(".main-wrapper").style.display = "block";
+      update();
+    }, 1000);
+  }, 2000); // ⬅️ هنا تتحكم فالمدة (2s)
 };
 
 function update() {
