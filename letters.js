@@ -32,31 +32,40 @@ const letters = [
 
 let current = 0;
 
-// ✅ تحديث الصورة والصوت حسب العنصر الحالي
-function update() {
-  const letter = letters[current];
-  document.getElementById("image").src = letter.image;
-  document.getElementById("audio").src = letter.sound;
+// =========================
+// عرض الحرف الحالي
+// =========================
+function showLetter(index) {
+  if (index >= 0 && index < letters.length) {
+    const letter = letters[index];
+    document.getElementById("image").src = letter.image;
+    document.getElementById("audio").src = letter.sound;
+    document.querySelector(".main-wrapper").style.display = "block";
+    document.getElementById("success-popup").style.display = "none";
+  } else if (index >= letters.length) {
+    document.getElementById("success-popup").style.display = "flex";
+    document.querySelector(".main-wrapper").style.display = "none";
+    document.getElementById("success-audio").play();
+  }
 }
 
 // ▶️ الحرف التالي
 function nextLetter() {
   current++;
   if (current < letters.length) {
-    update();
+    showLetter(current);
     if (current % 5 === 0) {
       setTimeout(showStarPopup, 500); // popup بعد كل 5 حروف
     }
   } else {
-    document.getElementById("success-popup").style.display = "flex";
-    document.getElementById("success-audio").play();
+    showLetter(current);
   }
 }
 
 // ◀️ الحرف السابق
 function prevLetter() {
   current = (current - 1 + letters.length) % letters.length;
-  update();
+  showLetter(current);
 }
 
 // 🔊 تشغيل صوت الحرف
@@ -95,28 +104,40 @@ function closePopup() {
   document.getElementById("success-popup").style.display = "none";
 }
 
+// =========================
+// إعادة من البداية
+// =========================
+function restart() {
+  current = 0;
+  showLetter(current);
+}
+
 // 🎬 عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
-  update();
+  // نخفي الدرس في البداية
+  document.querySelector(".main-wrapper").style.display = "none";
 
-  // زر البداية
   const startBtn = document.getElementById("start-btn");
   const intro = document.getElementById("intro-screen");
   const introAudio = document.getElementById("intro-audio");
 
-  startBtn.addEventListener("click", () => {
-    // ✅ تشغيل الصوت بعد الكبس
-    introAudio.currentTime = 0;
-    introAudio.play().catch(() => {});
+  startBtn.addEventListener("click", async () => {
+    try {
+      introAudio.currentTime = 0;
+      await introAudio.play();
+    } catch (e) {
+      console.warn("⚠️ لم يتم تشغيل الصوت:", e);
+    }
 
-    // انتظار 3 ثواني قبل الدخول
+    // ⏳ انتظر 3 ثواني قبل الإنتقال
     setTimeout(() => {
       intro.style.animation = "fadeOut 1s ease-in-out";
+
+      // ⏳ بعد انتهاء الأنيميشن (1 ثانية إضافية)
       setTimeout(() => {
         intro.style.display = "none";
-        document.querySelector(".main-wrapper").style.display = "block";
-        update();
+        showLetter(current); // عرض أول حرف
       }, 1000);
-    }, 3000);
+    }, 3000); // 3 ثواني انتظار
   });
 });

@@ -8,8 +8,8 @@
   <style>
 /* 🎬 زر البداية */
 #start-btn {
-  font-size: clamp(1.2rem, 2vw, 2rem);
-  padding: clamp(12px, 2vh, 20px) clamp(20px, 4vw, 40px);
+  font-size: 2rem;         /* حجم ثابت */
+  padding: 20px 50px;      /* ثابت بحال الكمبيوتر */
   background: #ff9800;
   color: white;
   border: none;
@@ -20,7 +20,7 @@
   transition: transform 0.2s, background 0.2s;
   animation: pulse 1.5s infinite;
   width: 100%;
-  max-width: 350px;
+  max-width: 400px;        /* كيما في PC */
   text-align: center;
 }
 #start-btn:hover { background: #e68900; transform: scale(1.1); }
@@ -93,10 +93,8 @@
 #game-popup.show { display: flex; }
 #game-popup .popup-box {
   background: white;
-  width: 95%;
-  max-width: 900px;
-  height: 90%;
-  max-height: 600px;
+  width: 900px;           /* ثابت */
+  height: 600px;          /* ثابت */
   border-radius: 1.5em;
   overflow: hidden;
   display: flex;
@@ -110,15 +108,8 @@
   border: none;
 }
 
-/* 📱 تجاوب إضافي */
-@media (max-width: 480px) {
-  #start-btn { font-size: 1rem; padding: 10px 20px; max-width: 280px; }
-  #game-popup .popup-box { height: 80%; }
-}
-@media (min-width: 1024px) {
-  #start-btn { font-size: 2rem; padding: 20px 50px; max-width: 400px; }
-  #game-popup .popup-box { height: 70%; }
-}
+/* 📱 ألغينا تجاوب الهاتف باش يبقى الشكل ثابت */
+
 
   </style>
 </head>
